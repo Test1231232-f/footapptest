@@ -1,18 +1,13 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
 
-# Заголовок и описание
 st.title("⚽ Футбольный Анализ")
-st.markdown("Добро пожаловать на сайт футбольной статистики! Выберите любимую команду и узнайте её показатели.")
+st.markdown("Добро пожаловать! Выберите команду и посмотрите её статистику за последние сезоны.")
 
-# Список команд
 teams = ["Барселона", "Реал Мадрид", "Манчестер Сити", "Бавария", "ПСЖ"]
 
-# Выбор команды
 team = st.selectbox("Выберите команду:", teams)
 
-# Заглушки статистики
 team_stats = {
     "Барселона": {"Сезон": [2020, 2021, 2022, 2023], "Голы": [85, 79, 90, 87]},
     "Реал Мадрид": {"Сезон": [2020, 2021, 2022, 2023], "Голы": [78, 88, 92, 85]},
@@ -21,19 +16,16 @@ team_stats = {
     "ПСЖ": {"Сезон": [2020, 2021, 2022, 2023], "Голы": [85, 89, 91, 88]},
 }
 
-# Получение данных
-data = team_stats[team]
-df = pd.DataFrame(data)
+df = pd.DataFrame(team_stats[team])
+st.subheader(f"📊 Статистика команды: {team}")
+st.dataframe(df, use_container_width=True)
 
-# Отображение таблицы
-st.subheader(f"Статистика команды {team}")
-st.dataframe(df)
+max_goals = df["Голы"].max()
+best_season = df[df["Голы"] == max_goals]["Сезон"].values[0]
+st.markdown(f"🏆 **Лучший сезон {team}: {best_season} год с {max_goals} голами**")
 
-# Построение графика
-fig, ax = plt.subplots()
-ax.plot(df["Сезон"], df["Голы"], marker='o')
-ax.set_title(f"Голы по сезонам – {team}")
-ax.set_xlabel("Сезон")
-ax.set_ylabel("Голы")
-ax.grid(True)
-s
+st.markdown("---")
+st.subheader("🗣️ Обратная связь")
+feedback = st.text_area("Что бы вы хотели улучшить?")
+if st.button("Отправить"):
+    st.success("Спасибо за ваш отзыв!")
